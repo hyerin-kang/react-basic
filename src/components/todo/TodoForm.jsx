@@ -1,10 +1,18 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { ActionButton } from "./TodoItem";
-import { TodoContext } from "../../context/TodoContext";
+
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addTodos } from "../../api/todo-api";
 
 const TodoForm = () => {
-  const { addTodos } = useContext(TodoContext);
+  const queryClient = useQueryClient();
+  const { mutate: addTodoMute } = useMutation({
+    mutationFn: addTodos,
+    onSettled: () => {
+      return queryClient.invalidateQueries(["todos"]);
+    },
+  });
   const [todoText, setTodoText] = useState("");
   const inputRef = useRef(null);
 
@@ -15,7 +23,7 @@ const TodoForm = () => {
       return;
     }
 
-    addTodos(todoText);
+    addTodoMute(todoText);
 
     setTodoText("");
   };
