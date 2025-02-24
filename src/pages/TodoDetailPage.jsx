@@ -1,14 +1,21 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import styled from "styled-components";
 import TodoItem, { ActionButton } from "../components/todo/TodoItem";
 import { TodoContext } from "../context/TodoContext";
 
 const TodoDetailPage = () => {
-  const { todos } = useContext(TodoContext);
+  const [targetTodoItem, setTargetTodoitem] = useState(null);
+  const { getTodoItem } = useContext(TodoContext);
   const { id } = useParams();
 
-  const targetTodoItem = todos.find((todo) => todo.id === id);
+  useEffect(() => {
+    const fetchTodoItem = async () => {
+      const todoItem = await getTodoItem(id);
+      setTargetTodoitem(todoItem);
+    };
+    fetchTodoItem();
+  }, [getTodoItem, id]);
 
   return (
     <DetailPageWrapper>
