@@ -6,7 +6,7 @@ import { useFilterParams } from "../../hooks/useFilterParams";
 
 const TodoList = () => {
   const selectedFilter = useFilterParams();
-  const { data: todos } = useTodoQuery(selectedFilter);
+  const { data: todos = [] } = useTodoQuery(selectedFilter);
 
   return (
     <TodoListSection>

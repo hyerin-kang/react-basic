@@ -1,25 +1,14 @@
-import styled from "styled-components";
 import { Link, useNavigate } from "react-router";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteTodo, toggleTodoCompleted } from "../../api/todo-api";
+import styled from "styled-components";
+import {
+  useDeleteTodoMutation,
+  useToggleTodoMutation,
+} from "../../hooks/useTodoQuery";
 
 const TodoItem = ({ completed, text, id }) => {
   const navigate = useNavigate();
-
-  const queryClient = useQueryClient();
-
-  const { mutate: toggleTodoMute } = useMutation({
-    mutationFn: ({ id, completed }) => toggleTodoCompleted(id, completed),
-    onSuccess: () => {
-      return queryClient.invalidateQueries({ queryKey: ["todos"] });
-    },
-  });
-  const { mutate: deleteTodoMutate } = useMutation({
-    mutationFn: deleteTodo,
-    onSuccess: () => {
-      return queryClient.invalidateQueries({ queryKey: ["todos"] });
-    },
-  });
+  const { mutate: toggleTodoMute } = useToggleTodoMutation();
+  const { mutate: deleteTodoMutate } = useDeleteTodoMutation();
 
   const navigateAfterDelete = (id) => {
     deleteTodoMutate(id);
@@ -36,7 +25,6 @@ const TodoItem = ({ completed, text, id }) => {
       <TodoItemActions>
         <ActionButton
           onClick={() => {
-            console.log("1111");
             toggleTodoMute({ id, completed });
           }}
           $bgColor={completed ? "#242424" : "#582be6"}
