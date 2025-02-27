@@ -1,5 +1,5 @@
 import { FileCheck, LaptopMinimal, Video } from "lucide-react";
-import styled from "styled-components";
+
 import { Link } from "react-router-dom";
 import { useFilterParams } from "../../hooks/useFilterParams";
 import { useTodoQuery } from "../../hooks/useTodoQuery";
@@ -12,97 +12,61 @@ const TodoDashboard = () => {
   const { data: pending } = useTodoQuery("pending");
 
   return (
-    <TodoDashboardSection>
-      <TodoDashboardHeader>Quick Access</TodoDashboardHeader>
+    <section className="flex flex-col gap-4">
+      <h2 className="text-2xl font-bold">Quick Access</h2>
 
-      <TodoDashboardCardList>
-        <TodoDashboardCardWrapper $flex={2}>
-          <TodoDashboardCard to="/" $selected={!selectedFilter}>
+      <ul className="flex flex-row flex-wrap gap-4">
+        <li className="flex-[2]">
+          <Link
+            to="/"
+            className={`flex flex-col w-full h-[184px] bg-[#e6582b] justify-between text-white p-5 rounded-2xl cursor-pointer ${
+              !selectedFilter && "underline"
+            }`}
+          >
             <div>
               <FileCheck />
             </div>
-            <TodoDashboardCardContent>
-              {all?.length} <br /> <span>All Tasks</span>
-            </TodoDashboardCardContent>
-          </TodoDashboardCard>
-        </TodoDashboardCardWrapper>
-        <TodoDashboardCardWrapper>
-          <TodoDashboardCard
+            <p className="text-xl font-semibold">
+              {all?.length} <br />{" "}
+              <span className="text-base font-normal">All Tasks</span>
+            </p>
+          </Link>
+        </li>
+        <li className="flex-1">
+          <Link
             to="?filter=completed"
-            $bgColor="#582be6"
-            $selected={selectedFilter === "completed"}
+            className={`flex flex-col w-full h-[184px] bg-[#582be6] justify-between text-white p-5 rounded-2xl cursor-pointer ${
+              selectedFilter === "completed" && "underline"
+            }`}
           >
             <div>
               <LaptopMinimal />
             </div>
-            <TodoDashboardCardContent>
-              {completed?.length} <br /> <span>Completed Tasks</span>
-            </TodoDashboardCardContent>
-          </TodoDashboardCard>
-        </TodoDashboardCardWrapper>
-        <TodoDashboardCardWrapper>
-          <TodoDashboardCard
+            <p className="text-xl font-semibold">
+              {completed?.length} <br />{" "}
+              <span className="text-base font-normal">Completed Tasks</span>
+            </p>
+          </Link>
+        </li>
+        <li className="flex-1">
+          <Link
+            className={`flex flex-col w-full h-[184px] bg-[#242424] justify-between text-white p-5 rounded-2xl cursor-pointer ${
+              selectedFilter === "pending" && "underline"
+            }`}
             to="?filter=pending"
-            $bgColor="#242424"
-            $selected={selectedFilter === "pending"}
           >
             <div>
               <Video />
             </div>
-            <TodoDashboardCardContent>
-              {pending?.length} <br /> <span>Pending Tasks</span>
-            </TodoDashboardCardContent>
-          </TodoDashboardCard>
-        </TodoDashboardCardWrapper>
-      </TodoDashboardCardList>
-    </TodoDashboardSection>
+            <p className="text-xl font-semibold">
+              {pending?.length} <br />{" "}
+              <span className="text-base font-normal">Pending Tasks</span>
+            </p>
+          </Link>
+        </li>
+      </ul>
+    </section>
   );
 };
-
-const TodoDashboardSection = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
-
-const TodoDashboardHeader = styled.h2`
-  font-size: 1.5rem;
-  font-weight: bold;
-`;
-
-const TodoDashboardCardList = styled.ul`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 1rem;
-`;
-
-const TodoDashboardCardWrapper = styled.li`
-  flex: ${({ $flex = 1 }) => $flex};
-`;
-
-const TodoDashboardCard = styled(Link)`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 184px;
-  background-color: ${({ $bgColor = "#e6582b" }) => $bgColor};
-  justify-content: space-between;
-  color: white;
-  padding: 1.25rem;
-  border-radius: 1rem;
-  cursor: pointer;
-  text-decoration: ${({ $selected }) => ($selected ? "underline" : "none")};
-`;
-
-const TodoDashboardCardContent = styled.p`
-  font-size: 1.25rem;
-  font-weight: 600;
-
-  span {
-    font-size: 1rem;
-    font-weight: 400;
-  }
-`;
 
 export default TodoDashboard;
